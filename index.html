@@ -9,15 +9,15 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@1,8..60,500;1,8..60,600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink-900:#10131D;
-    --ink-800:#171C2C;
-    --ink-700:#222842;
-    --line:#323A58;
-    --rust:#E2924A;
-    --rust-dim:#6b4a2b;
-    --moss:#74A98B;
-    --text:#E9E6DC;
-    --text-dim:#9099B5;
+    --ink-900:#F3F4F8;
+    --ink-800:#FFFFFF;
+    --ink-700:#F4F5FA;
+    --line:#DADEE9;
+    --rust:#C96A1F;
+    --rust-dim:#F2DBC2;
+    --moss:#3F7A52;
+    --text:#1B1F2E;
+    --text-dim:#6B7280;
     --paper:#F3EEE2;
     --paper-ink:#241F18;
     --paper-sub:#6B6250;
@@ -81,7 +81,7 @@
   /* --- question card --- */
   .card{
     background:var(--ink-800);border:1px solid var(--line);border-radius:10px;
-    padding:2rem;
+    padding:2rem;box-shadow:0 1px 3px rgba(20,24,40,.06), 0 12px 28px -18px rgba(20,24,40,.12);
   }
   .q-eyebrow{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.9rem;}
   .q-text{font-size:1.3rem;font-weight:600;line-height:1.4;margin:0 0 1.6rem;}
@@ -92,7 +92,7 @@
     border-radius:8px;padding:.95rem 1.2rem;color:var(--text);font-family:var(--sans);
     font-size:.95rem;cursor:pointer;transition:border-color .15s ease, background .15s ease, transform .1s ease;
   }
-  .option:hover,.option:focus-visible{border-color:var(--rust);background:#262d49;outline:none;}
+  .option:hover,.option:focus-visible{border-color:var(--rust);background:var(--rust-dim);outline:none;}
   .option:active{transform:scale(.995);}
   .option .opt-tag{font-family:var(--mono);font-size:.68rem;color:var(--text-dim);white-space:nowrap;flex:none;}
   .back-btn{
