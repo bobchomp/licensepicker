@@ -151,6 +151,28 @@
     margin-top:3rem;font-family:var(--mono);font-size:.72rem;color:var(--text-dim);
     max-width:60ch;line-height:1.6;
   }
+
+  .stats{margin-top:3.5rem;padding-top:2.25rem;border-top:1px solid var(--line);}
+  .stats-eyebrow{
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--text-dim);margin-bottom:.6rem;
+  }
+  .stats-title{font-size:1.05rem;font-weight:700;margin:0 0 1.5rem;}
+  .stat-row{display:flex;flex-wrap:wrap;gap:1.75rem 2.5rem;margin-bottom:2rem;}
+  .stat{display:flex;flex-direction:column;}
+  .stat .num{font-family:var(--mono);font-size:1.7rem;font-weight:600;color:var(--rust);line-height:1;}
+  .stat .lbl{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-dim);margin-top:.4rem;}
+  .license-groups{display:flex;flex-direction:column;gap:1.15rem;}
+  .license-group h4{
+    font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;
+    color:var(--text-dim);margin:0 0 .6rem;
+  }
+  .chip-row{display:flex;flex-wrap:wrap;gap:.55rem;}
+  .chip{
+    display:inline-flex;align-items:center;gap:.45rem;background:var(--ink-700);
+    border:1px solid var(--line);border-radius:999px;padding:.4rem .85rem .4rem .9rem;font-size:.8rem;
+  }
+  .chip .chip-spdx{font-family:var(--mono);font-size:.66rem;color:var(--text-dim);}
 </style>
 </head>
 <body>
@@ -165,6 +187,8 @@
     <aside><ul class="graph" id="graph"></ul></aside>
     <main id="stage"></main>
   </div>
+
+  <section class="stats" id="statsSection"></section>
 
   <footer class="note">Not legal advice. This walks through common, well-known license choices based on what you tell it — for anything high-stakes (funding, enterprise customers, patents you actually care about), it's worth a few minutes with a lawyer.</footer>
 </div>
@@ -803,6 +827,41 @@ try{
     return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
+  const CATEGORIES = [
+    { label:'Public domain', keys:['unlicense','cc0-1.0'] },
+    { label:'Permissive', keys:['mit','apache-2.0','bsd-2-clause','bsd-3-clause','bsl-1.0'] },
+    { label:'Weak copyleft', keys:['mpl-2.0','epl-2.0','lgpl-3.0','lgpl-2.1'] },
+    { label:'Strong copyleft', keys:['gpl-3.0','gpl-2.0','agpl-3.0'] },
+    { label:'No license', keys:['no-license'] }
+  ];
+
+  function renderStats(){
+    const total = Object.keys(LICENSES).length;
+    const statRow = CATEGORIES.map(cat => `
+      <div class="stat"><span class="num">${cat.keys.length}</span><span class="lbl">${esc(cat.label)}</span></div>
+    `).join('');
+
+    const groups = CATEGORIES.map(cat => {
+      const chips = cat.keys.map(k => {
+        const m = LICENSES[k].meta;
+        const spdxLabel = (m['spdx-id'] && m['spdx-id'] !== '—') ? `<span class="chip-spdx">${esc(m['spdx-id'])}</span>` : '';
+        return `<span class="chip">${esc(m.title)}${spdxLabel}</span>`;
+      }).join('');
+      return `<div class="license-group"><h4>${esc(cat.label)}</h4><div class="chip-row">${chips}</div></div>`;
+    }).join('');
+
+    document.getElementById('statsSection').innerHTML = `
+      <div class="stats-eyebrow">reference</div>
+      <p class="stats-title">${total} licenses available in this tool</p>
+      <div class="stat-row">
+        <div class="stat"><span class="num">${total}</span><span class="lbl">Total</span></div>
+        ${statRow}
+      </div>
+      <div class="license-groups">${groups}</div>
+    `;
+  }
+
+  renderStats();
   render();
 }catch(err){
   document.getElementById('stage').innerHTML =
